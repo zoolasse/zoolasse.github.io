@@ -10,7 +10,6 @@
   <style>
     :root{
       --bg:#0b0d10;
-      --card:#10141a;
       --text:#e8eaf0;
       --muted:#a8b0bf;
       --line:rgba(255,255,255,.10);
@@ -108,15 +107,18 @@
     .track.playing{
       border-color:var(--line2);
     }
+    .track.loading{
+      border-color:rgba(255,255,255,.30);
+    }
 
     .cover{
       width:140px;
       height:140px;
       object-fit:cover;
-      border-radius:0; /* carré comme demandé */
+      border-radius:0; /* carré */
       background:#111;
       border:1px solid rgba(255,255,255,.08);
-      cursor:pointer; /* clickable */
+      cursor:pointer;
       user-select:none;
     }
 
@@ -130,23 +132,6 @@
       width:100%;
       filter:invert(1) hue-rotate(180deg);
       opacity:.92;
-    }
-
-    /* GALLERY */
-    .gallery{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:16px;
-      margin-top:16px;
-    }
-
-    .gallery img{
-      width:100%;
-      height:220px;
-      object-fit:cover;
-      border-radius:0;
-      border:1px solid var(--line);
-      box-shadow:0 12px 26px rgba(0,0,0,.35);
     }
 
     /* CONTACT */
@@ -254,16 +239,6 @@
     </div>
   </div>
 
-  <!-- GALLERY -->
-  <h2>Studio & Live</h2>
-  <div class="gallery">
-    <img src="n.jpg" alt="Studio">
-    <img src="acidmist.jpg" alt="Live">
-    <img src="offshore.jpg" alt="Console">
-    <img src="ditch.jpg" alt="Die in the Ditch">
-    <img src="bastard.jpeg" alt="Little Hat Bastard">
-  </div>
-
   <!-- CONTACT -->
   <h2>Contact</h2>
   <div class="contact">
@@ -274,60 +249,95 @@
 </div>
 
 <script>
-  const tracks = document.querySelectorAll('.track');
+  const tracks = Array.from(document.querySelectorAll('.track'));
+
+  function stopOtherAudios(currentAudio) {
+    tracks.forEach(t => {
+      const a = t.querySelector('audio');
+      if (!a || a === currentAudio) return;
+      a.pause();
+      a.currentTime = 0;
+      t.classList.remove('playing', 'loading');
+    });
+  }
+
+  async function playFromCover(track, audio) {
+    stopOtherAudios(audio);
+
+    // Some browsers need an explicit load when preload="none"
+    if (audio.readyState === 0) {
+      track.classList.add('loading');
+      try { audio.load(); } catch (e) {}
+    }
+
+    try {
+      const p = audio.play();
+      if (p && typeof p.then === 'function') await p;
+      track.classList.add('playing');
+    } catch (err) {
+      // If play is blocked, user can still hit play on native controls
+      console.warn('Playback blocked:', err);
+    } finally {
+      track.classList.remove('loading');
+    }
+  }
 
   tracks.forEach(track => {
     const cover = track.querySelector('.cover');
     const audio = track.querySelector('audio');
-
     if (!cover || !audio) return;
 
     cover.addEventListener('click', () => {
-      // Stop all other tracks
-      tracks.forEach(t => {
-        const a = t.querySelector('audio');
-        if (a && a !== audio) {
-          a.pause();
-          a.currentTime = 0;
-          t.classList.remove('playing');
-        }
-      });
-
-      // Toggle play / pause on this one
       if (audio.paused) {
-        audio.play();
-        track.classList.add('playing');
+        playFromCover(track, audio);
       } else {
         audio.pause();
-        track.classList.remove('playing');
+        track.classList.remove('playing', 'loading');
       }
     });
 
-    // If audio ends, remove highlight
-    audio.addEventListener('ended', () => {
-      track.classList.remove('playing');
-    });
-
-    // If user presses play on the native controls, sync highlight + stop others
     audio.addEventListener('play', () => {
-      tracks.forEach(t => {
-        const a = t.querySelector('audio');
-        if (a && a !== audio) {
-          a.pause();
-          a.currentTime = 0;
-          t.classList.remove('playing');
-        }
-      });
+      stopOtherAudios(audio);
       track.classList.add('playing');
+      track.classList.remove('loading');
     });
 
     audio.addEventListener('pause', () => {
-      track.classList.remove('playing');
+      track.classList.remove('playing', 'loading');
+    });
+
+    audio.addEventListener('waiting', () => {
+      track.classList.add('loading');
+    });
+
+    audio.addEventListener('canplay', () => {
+      track.classList.remove('loading');
+    });
+
+    audio.addEventListener('ended', () => {
+      track.classList.remove('playing', 'loading');
     });
   });
 </script>
 
+
+  .footer-image{
+  margin:40px 0 10px;
+}
+
+.footer-image img{
+  width:100%;
+  max-width:960px;
+  height:auto;
+  display:block;
+  margin:0 auto;
+  border:1px solid var(--line);
+  box-shadow:0 12px 30px rgba(0,0,0,.45);
+}
+<div class="footer-image">
+  <img src="n.jpg" alt="Studio / Mood">
+</div>
+
+
 </body>
 </html>
-
-
