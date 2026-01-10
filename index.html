@@ -99,8 +99,15 @@
       border:1px solid var(--line);
       background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
       box-shadow:0 10px 24px rgba(0,0,0,.25);
+      transition:border-color .15s ease, transform .15s ease;
     }
-    .track:hover{border-color:var(--line2)}
+    .track:hover{
+      border-color:var(--line2);
+      transform:translateY(-1px);
+    }
+    .track.playing{
+      border-color:var(--line2);
+    }
 
     .cover{
       width:140px;
@@ -109,6 +116,8 @@
       border-radius:0; /* carré comme demandé */
       background:#111;
       border:1px solid rgba(255,255,255,.08);
+      cursor:pointer; /* clickable */
+      user-select:none;
     }
 
     .track strong{
@@ -263,6 +272,62 @@
   </div>
 
 </div>
+
+<script>
+  const tracks = document.querySelectorAll('.track');
+
+  tracks.forEach(track => {
+    const cover = track.querySelector('.cover');
+    const audio = track.querySelector('audio');
+
+    if (!cover || !audio) return;
+
+    cover.addEventListener('click', () => {
+      // Stop all other tracks
+      tracks.forEach(t => {
+        const a = t.querySelector('audio');
+        if (a && a !== audio) {
+          a.pause();
+          a.currentTime = 0;
+          t.classList.remove('playing');
+        }
+      });
+
+      // Toggle play / pause on this one
+      if (audio.paused) {
+        audio.play();
+        track.classList.add('playing');
+      } else {
+        audio.pause();
+        track.classList.remove('playing');
+      }
+    });
+
+    // If audio ends, remove highlight
+    audio.addEventListener('ended', () => {
+      track.classList.remove('playing');
+    });
+
+    // If user presses play on the native controls, sync highlight + stop others
+    audio.addEventListener('play', () => {
+      tracks.forEach(t => {
+        const a = t.querySelector('audio');
+        if (a && a !== audio) {
+          a.pause();
+          a.currentTime = 0;
+          t.classList.remove('playing');
+        }
+      });
+      track.classList.add('playing');
+    });
+
+    audio.addEventListener('pause', () => {
+      track.classList.remove('playing');
+    });
+  });
+</script>
+
 </body>
 </html>
+
 
