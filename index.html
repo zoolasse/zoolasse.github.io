@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
   <title>Benoit Pouzol (Zool) — Producteur / Ingénieur du son / Mixeur</title>
-  <meta name="description" content="Benoit Pouzol (Zool) — Producteur, ingénieur du son et mixeur. Rock, metal, hardcore. Studio & live. Voice over / voix off. Enseignant 3iS Éducation.">
+  <meta name="description" content="Benoit Pouzol (Zool) — Producteur, ingénieur du son et mixeur. Rock, metal, hardcore. Voice over / voix off. Enseignant 3iS Éducation.">
 
   <style>
     :root{
@@ -104,8 +104,7 @@
       border-color:var(--line2);
       transform:translateY(-1px);
     }
-    .track.playing{ border-color:var(--line2); }
-    .track.loading{ border-color:rgba(255,255,255,.30); }
+    .track.playing{border-color:var(--line2)}
 
     .cover{
       width:140px;
@@ -140,34 +139,26 @@
       gap:8px;
     }
 
-   /* FOOTER IMAGES (2 small side-by-side) */
-.footer-image{
-  margin:40px 0 10px;
-  display:grid;
-  grid-template-columns:repeat(2, minmax(0, 1fr));
-  gap:14px;
-  align-items:start;
-}
+    /* FOOTER IMAGES (small, side by side) */
+    .footer-image{
+      margin:40px 0 10px;
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:14px;
+    }
+    .footer-image img{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      border:1px solid var(--line);
+      box-shadow:0 12px 30px rgba(0,0,0,.45);
+    }
 
-.footer-image img{
-  width:100%;
-  height:180px;        /* <- taille “petite” */
-  object-fit:cover;    /* recadre propre */
-  display:block;
-  border:1px solid var(--line);
-  box-shadow:0 12px 30px rgba(0,0,0,.45);
-}
-
-/* sur mobile: 1 colonne */
-@media (max-width:700px){
-  .footer-image{
-    grid-template-columns:1fr;
-  }
-  .footer-image img{
-    height:200px;
-  }
-}
-
+    @media (max-width:700px){
+      .track{grid-template-columns:1fr}
+      .cover{width:100%;height:200px}
+      .footer-image{grid-template-columns:1fr}
+      .footer-image img{height:200px}
     }
   </style>
 </head>
@@ -211,7 +202,7 @@
   <h2>Productions (sélection)</h2>
 
   <div class="track">
-    <img class="cover" src="acidmist.jpg" alt="Hypno5e - Acid Mist">
+    <img class="cover" src="acidmist.jpg" alt="Hypno5e — Acid Mist">
     <div>
       <strong>Hypno5e — Acid Mist</strong>
       <audio controls preload="none">
@@ -221,7 +212,7 @@
   </div>
 
   <div class="track">
-    <img class="cover" src="ditch.jpg" alt="GoulouD - Die in the Ditch">
+    <img class="cover" src="ditch.jpg" alt="GoulouD — Die in the Ditch">
     <div>
       <strong>GoulouD — Die in the Ditch</strong>
       <audio controls preload="none">
@@ -233,7 +224,7 @@
   <div class="track">
     <img class="cover" src="offshore.jpg" alt="Hypno5e — Offshore">
     <div>
-      <strong>Hypno5e — Offshore (1)</strong>
+      <strong>Hypno5e — Offshore</strong>
       <audio controls preload="none">
         <source src="offshore.mp3" type="audio/mpeg">
       </audio>
@@ -241,7 +232,7 @@
   </div>
 
   <div class="track">
-    <img class="cover" src="bastard.jpeg" alt="GoulouD - Little Hat Bastard">
+    <img class="cover" src="bastard.jpeg" alt="GoulouD — Little Hat Bastard">
     <div>
       <strong>GoulouD — Little Hat Bastard</strong>
       <audio controls preload="none">
@@ -257,10 +248,10 @@
     <div>🌍 Avignon — France</div>
   </div>
 
-  <!-- FOOTER IMAGE -->
+  <!-- FOOTER IMAGES -->
   <div class="footer-image">
     <img src="n.jpg" alt="Studio / Mood">
-    <img src="rack.jpg" alt="Studio / Mood">
+    <img src="rack.jpg" alt="Studio / Rack">
   </div>
 
 </div>
@@ -274,27 +265,8 @@
       if (!a || a === currentAudio) return;
       a.pause();
       a.currentTime = 0;
-      t.classList.remove('playing', 'loading');
+      t.classList.remove('playing');
     });
-  }
-
-  async function playFromCover(track, audio) {
-    stopOtherAudios(audio);
-
-    if (audio.readyState === 0) {
-      track.classList.add('loading');
-      try { audio.load(); } catch (e) {}
-    }
-
-    try {
-      const p = audio.play();
-      if (p && typeof p.then === 'function') await p;
-      track.classList.add('playing');
-    } catch (err) {
-      console.warn('Playback blocked:', err);
-    } finally {
-      track.classList.remove('loading');
-    }
   }
 
   tracks.forEach(track => {
@@ -304,33 +276,26 @@
 
     cover.addEventListener('click', () => {
       if (audio.paused) {
-        playFromCover(track, audio);
+        stopOtherAudios(audio);
+        audio.play().catch(()=>{});
+        track.classList.add('playing');
       } else {
         audio.pause();
-        track.classList.remove('playing', 'loading');
+        track.classList.remove('playing');
       }
     });
 
     audio.addEventListener('play', () => {
       stopOtherAudios(audio);
       track.classList.add('playing');
-      track.classList.remove('loading');
     });
 
     audio.addEventListener('pause', () => {
-      track.classList.remove('playing', 'loading');
-    });
-
-    audio.addEventListener('waiting', () => {
-      track.classList.add('loading');
-    });
-
-    audio.addEventListener('canplay', () => {
-      track.classList.remove('loading');
+      track.classList.remove('playing');
     });
 
     audio.addEventListener('ended', () => {
-      track.classList.remove('playing', 'loading');
+      track.classList.remove('playing');
     });
   });
 </script>
