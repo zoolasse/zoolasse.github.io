@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
   <title>Benoit Pouzol (Zool) — Producteur / Ingénieur du son / Mixeur</title>
-  <meta name="description" content="Benoit Pouzol (Zool) — Producteur, ingénieur du son et mixeur. Rock, metal, hardcore. Studio & live. Enseignant 3iS.">
+  <meta name="description" content="Benoit Pouzol (Zool) — Producteur, ingénieur du son et mixeur. Rock, metal, hardcore. Studio & live. Voice over / voix off. Enseignant 3iS Éducation.">
 
   <style>
     :root{
@@ -85,6 +85,8 @@
       box-shadow:0 10px 24px rgba(0,0,0,.25);
     }
     .bio p{margin:14px 0}
+    .bio p:first-child{margin-top:0}
+    .bio p:last-child{margin-bottom:0}
 
     /* TRACK LIST */
     .track{
@@ -98,15 +100,30 @@
       background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
       box-shadow:0 10px 24px rgba(0,0,0,.25);
     }
-
     .track:hover{border-color:var(--line2)}
 
-    .track img{
+    .cover{
       width:140px;
       height:140px;
       object-fit:cover;
       border-radius:0; /* carré comme demandé */
       background:#111;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .fallback{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:140px;
+      height:140px;
+      border-radius:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.3px;
+      text-transform:uppercase;
     }
 
     .track strong{
@@ -138,21 +155,19 @@
       box-shadow:0 12px 26px rgba(0,0,0,.35);
     }
 
+    /* CONTACT */
     .contact{
       margin-top:28px;
       padding:16px;
       border:1px solid var(--line);
       color:var(--muted);
+      display:grid;
+      gap:8px;
     }
 
     @media (max-width:700px){
-      .track{
-        grid-template-columns:1fr;
-      }
-      .track img{
-        width:100%;
-        height:200px;
-      }
+      .track{grid-template-columns:1fr}
+      .cover,.fallback{width:100%;height:200px}
     }
   </style>
 </head>
@@ -175,9 +190,20 @@
       Benoit Pouzol est producteur, ingénieur du son et mixeur.
       Il a produit plus d’une cinquantaine d’albums dans les esthétiques rock, metal et hardcore.
     </p>
+
     <p>
       Il a travaillé comme ingénieur du son live pour Hypno5e et Perturbator,
-      et enseigne la prise de son et le studio à 3iS.
+      dans le cadre de tournées et productions internationales.
+    </p>
+
+    <p>
+      Il intervient également comme ingénieur du son pour la prise de voix off et le voice over
+      sur des projets documentaires, web et audiovisuels (Axolot, Étranges Escales, Pandora Création, Arte…).
+    </p>
+
+    <p>
+      Enseignant à 3iS Éducation (RNCP – diplôme d’État),
+      il transmet les méthodologies professionnelles liées à la prise de son et au studio d’enregistrement.
     </p>
   </div>
 
@@ -185,7 +211,7 @@
   <h2>Productions (sélection)</h2>
 
   <div class="track">
-    <img src="acidmist.jpg" alt="Acid Mist">
+    <img class="cover" src="acidmist.jpg" alt="Acid Mist">
     <div>
       <strong>Acid Mist</strong>
       <audio controls preload="none">
@@ -195,7 +221,7 @@
   </div>
 
   <div class="track">
-    <img src="ditch.jpg" alt="Die in the Ditch">
+    <img class="cover" src="n.jpg" alt="Die in the Ditch">
     <div>
       <strong>Die in the Ditch</strong>
       <audio controls preload="none">
@@ -205,7 +231,7 @@
   </div>
 
   <div class="track">
-    <img src="offshore.jpg" alt="Hypno5e Offshore">
+    <img class="cover" src="offshore.jpg" alt="Hypno5e — Offshore">
     <div>
       <strong>Hypno5e — Offshore (1)</strong>
       <audio controls preload="none">
@@ -215,7 +241,7 @@
   </div>
 
   <div class="track">
-    <img src="offshore.jpg" alt="Hypno5e Offshore">
+    <img class="cover" src="offshore.jpg" alt="Hypno5e — Offshore">
     <div>
       <strong>Hypno5e — Offshore (2)</strong>
       <audio controls preload="none">
@@ -225,7 +251,7 @@
   </div>
 
   <div class="track">
-    <img src="bastard.jpg" alt="Little Hat Bastard">
+    <div class="fallback">No Cover</div>
     <div>
       <strong>Little Hat Bastard</strong>
       <audio controls preload="none">
@@ -238,14 +264,15 @@
   <h2>Studio & Live</h2>
   <div class="gallery">
     <img src="n.jpg" alt="Studio">
+    <img src="acidmist.jpg" alt="Live">
+    <img src="offshore.jpg" alt="Console">
   </div>
 
   <!-- CONTACT -->
   <h2>Contact</h2>
   <div class="contact">
-    <a href="mailto:pouzolbenoit@gmail.com">pouzolbenoit@gmail.com</a>
-
-    🌍 Avignon — France
+    <div>📧 <a href="mailto:pouzolbenoit@gmail.com">pouzolbenoit@gmail.com</a></div>
+    <div>🌍 Avignon — France</div>
   </div>
 
 </div>
