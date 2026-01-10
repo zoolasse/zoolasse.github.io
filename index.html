@@ -104,18 +104,14 @@
       border-color:var(--line2);
       transform:translateY(-1px);
     }
-    .track.playing{
-      border-color:var(--line2);
-    }
-    .track.loading{
-      border-color:rgba(255,255,255,.30);
-    }
+    .track.playing{ border-color:var(--line2); }
+    .track.loading{ border-color:rgba(255,255,255,.30); }
 
     .cover{
       width:140px;
       height:140px;
       object-fit:cover;
-      border-radius:0; /* carré */
+      border-radius:0;
       background:#111;
       border:1px solid rgba(255,255,255,.08);
       cursor:pointer;
@@ -142,6 +138,20 @@
       color:var(--muted);
       display:grid;
       gap:8px;
+    }
+
+    /* FOOTER IMAGE (n.jpg only) */
+    .footer-image{
+      margin:40px 0 10px;
+    }
+    .footer-image img{
+      width:100%;
+      max-width:960px;
+      height:auto;
+      display:block;
+      margin:0 auto;
+      border:1px solid var(--line);
+      box-shadow:0 12px 30px rgba(0,0,0,.45);
     }
 
     @media (max-width:700px){
@@ -190,9 +200,9 @@
   <h2>Productions (sélection)</h2>
 
   <div class="track">
-    <img class="cover" src="acidmist.jpg" alt="Acid Mist">
+    <img class="cover" src="acidmist.jpg" alt="Hypno5e - Acid Mist">
     <div>
-      <strong>Hypno5e - Acid Mist</strong>
+      <strong>Hypno5e — Acid Mist</strong>
       <audio controls preload="none">
         <source src="acidmist.mp3" type="audio/mpeg">
       </audio>
@@ -200,9 +210,9 @@
   </div>
 
   <div class="track">
-    <img class="cover" src="ditch.jpg" alt="Die in the Ditch">
+    <img class="cover" src="ditch.jpg" alt="GoulouD - Die in the Ditch">
     <div>
-      <strong>GoulouD - Die in the Ditch</strong>
+      <strong>GoulouD — Die in the Ditch</strong>
       <audio controls preload="none">
         <source src="ditch.mp3" type="audio/mpeg">
       </audio>
@@ -210,22 +220,29 @@
   </div>
 
   <div class="track">
-    <img class="cover" src="offshore.jpg" alt="Hypno5e — Offshore">
+    <img class="cover" src="offshore.jpg" alt="Hypno5e — Offshore (1)">
     <div>
-      <strong>Hypno5e — Offshore</strong>
+      <strong>Hypno5e — Offshore (1)</strong>
       <audio controls preload="none">
-        <source src="offshore.mp3" type="audio/mpeg">
+        <source src="offshore1.mp3" type="audio/mpeg">
       </audio>
-    </div>
-  </div>
-  
     </div>
   </div>
 
   <div class="track">
-    <img class="cover" src="bastard.jpeg" alt="Little Hat Bastard">
+    <img class="cover" src="offshore.jpg" alt="Hypno5e — Offshore (2)">
     <div>
-      <strong>GoulouD - Little Hat Bastard</strong>
+      <strong>Hypno5e — Offshore (2)</strong>
+      <audio controls preload="none">
+        <source src="offshore2.mp3" type="audio/mpeg">
+      </audio>
+    </div>
+  </div>
+
+  <div class="track">
+    <img class="cover" src="bastard.jpeg" alt="GoulouD - Little Hat Bastard">
+    <div>
+      <strong>GoulouD — Little Hat Bastard</strong>
       <audio controls preload="none">
         <source src="bastard.mp3" type="audio/mpeg">
       </audio>
@@ -237,6 +254,11 @@
   <div class="contact">
     <div>📧 <a href="mailto:pouzolbenoit@gmail.com">pouzolbenoit@gmail.com</a></div>
     <div>🌍 Avignon — France</div>
+  </div>
+
+  <!-- FOOTER IMAGE -->
+  <div class="footer-image">
+    <img src="n.jpg" alt="Studio / Mood">
   </div>
 
 </div>
@@ -257,7 +279,6 @@
   async function playFromCover(track, audio) {
     stopOtherAudios(audio);
 
-    // Some browsers need an explicit load when preload="none"
     if (audio.readyState === 0) {
       track.classList.add('loading');
       try { audio.load(); } catch (e) {}
@@ -268,7 +289,6 @@
       if (p && typeof p.then === 'function') await p;
       track.classList.add('playing');
     } catch (err) {
-      // If play is blocked, user can still hit play on native controls
       console.warn('Playback blocked:', err);
     } finally {
       track.classList.remove('loading');
@@ -312,25 +332,6 @@
     });
   });
 </script>
-
-
-  .footer-image{
-  margin:40px 0 10px;
-}
-
-.footer-image img{
-  width:100%;
-  max-width:960px;
-  height:auto;
-  display:block;
-  margin:0 auto;
-  border:1px solid var(--line);
-  box-shadow:0 12px 30px rgba(0,0,0,.45);
-}
-<div class="footer-image">
-  <img src="n.jpg" alt="Studio / Mood">
-</div>
-
 
 </body>
 </html>
